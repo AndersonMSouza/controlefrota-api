@@ -20,6 +20,7 @@ import com.mendes.anderson.domain.exceptions.EntidadeEmUsoException;
 import com.mendes.anderson.domain.exceptions.EntidadeNaoEncontradaException;
 import com.mendes.anderson.domain.model.Empresa;
 import com.mendes.anderson.domain.repository.EmpresaRepository;
+import com.mendes.anderson.domain.service.CadastroEmpresaService;
 
 
 @RestController
@@ -28,6 +29,9 @@ public class EmpresaController {
 	
 	@Autowired
 	private EmpresaRepository empresaRepository;
+	
+	@Autowired
+	private CadastroEmpresaService cadastroEmpresaService;
 	
 	@GetMapping
 	public List<Empresa> listar() {
@@ -47,7 +51,7 @@ public class EmpresaController {
 	@PostMapping
 	public ResponseEntity<?> adicionar(@RequestBody Empresa empresa) {
 		try {
-			empresa = empresaRepository.save(empresa);
+			empresa = cadastroEmpresaService.salvar(empresa);
 			return ResponseEntity.status(HttpStatus.CREATED).body(empresa);
 		
 		} catch (EntidadeNaoEncontradaException e) {
@@ -64,7 +68,7 @@ public class EmpresaController {
 			if (empresaAtual != null) {
 				BeanUtils.copyProperties(empresa, empresaAtual, "id");
 				
-				empresaAtual = empresaRepository.save(empresaAtual);
+				empresaAtual = cadastroEmpresaService.salvar(empresaAtual);
 				return ResponseEntity.ok(empresaAtual);
 			}
 			
