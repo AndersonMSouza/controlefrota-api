@@ -83,7 +83,7 @@ public class EmpresaController {
 	@DeleteMapping("/{empresaId}")
 	public ResponseEntity<Empresa> remover(@PathVariable Long empresaId) {
 		try {
-			empresaRepository.deleteById(empresaId);
+			cadastroEmpresaService.excluir(empresaId);
 			return ResponseEntity.noContent().build();
 			
 		} catch (EntidadeNaoEncontradaException e) {
