@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mendes.anderson.domain.exceptions.EntidadeEmUsoException;
 import com.mendes.anderson.domain.exceptions.EntidadeNaoEncontradaException;
 import com.mendes.anderson.domain.model.Empresa;
 import com.mendes.anderson.domain.repository.EmpresaRepository;
@@ -81,17 +81,9 @@ public class EmpresaController {
 	}
 	
 	@DeleteMapping("/{empresaId}")
-	public ResponseEntity<Empresa> remover(@PathVariable Long empresaId) {
-		try {
-			cadastroEmpresaService.excluir(empresaId);
-			return ResponseEntity.noContent().build();
-			
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.notFound().build();
-			
-		} catch (EntidadeEmUsoException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
-		}
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void remover(@PathVariable Long empresaId) {
+		cadastroEmpresaService.excluir(empresaId);			
 	}
 	
 }
