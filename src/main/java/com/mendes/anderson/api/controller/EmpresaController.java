@@ -38,14 +38,9 @@ public class EmpresaController {
 		return empresaRepository.findAll();
 	}
 	
-	public ResponseEntity<Empresa> buscar(@PathVariable Long empresaId) {
-		Optional<Empresa> empresa = empresaRepository.findById(empresaId);
-		
-		if (empresa.isPresent()) {
-			return ResponseEntity.ok(empresa.get());
-		}
-	
-		return ResponseEntity.notFound().build();		
+	@GetMapping("/{empresaId}")
+	public Empresa buscar(@PathVariable Long empresaId) {
+		return cadastroEmpresaService.buscarOuFalhar(empresaId);		
 	}
 	
 	@PostMapping
