@@ -1,7 +1,6 @@
 package com.mendes.anderson.api.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,14 +43,9 @@ public class EmpresaController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> adicionar(@RequestBody Empresa empresa) {
-		try {
-			empresa = cadastroEmpresaService.salvar(empresa);
-			return ResponseEntity.status(HttpStatus.CREATED).body(empresa);
-		
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+	@ResponseStatus(HttpStatus.CREATED)
+	public Empresa adicionar(@RequestBody Empresa empresa) {
+		return cadastroEmpresaService.salvar(empresa);			
 	}
 	
 	@PutMapping("/{empresaId}")
