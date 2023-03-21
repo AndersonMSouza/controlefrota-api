@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mendes.anderson.domain.exceptions.EntidadeNaoEncontradaException;
 import com.mendes.anderson.domain.model.Empresa;
 import com.mendes.anderson.domain.repository.EmpresaRepository;
 import com.mendes.anderson.domain.service.CadastroEmpresaService;
@@ -49,24 +47,13 @@ public class EmpresaController {
 	}
 	
 	@PutMapping("/{empresaId}")
-	public ResponseEntity<?> atualizar(@PathVariable Long empresaId,
-			@RequestBody Empresa empresa) {
-		try {			
-			Empresa empresaAtual = empresaRepository.findById(empresaId).orElse(null);
+	public Empresa atualizar(@PathVariable Long empresaId,
+			@RequestBody Empresa empresa) {					
+		Empresa empresaAtual = empresaRepository.findById(empresaId).orElse(null);
 			
-			if (empresaAtual != null) {
-				BeanUtils.copyProperties(empresa, empresaAtual, "id");
+		BeanUtils.copyProperties(empresa, empresaAtual, "id");
 				
-				empresaAtual = cadastroEmpresaService.salvar(empresaAtual);
-				return ResponseEntity.ok(empresaAtual);
-			}
-			
-			return ResponseEntity.notFound().build();
-		
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.badRequest()
-				.body(e.getMessage());
-		}
+		return cadastroEmpresaService.salvar(empresaAtual);
 	}
 	
 	@DeleteMapping("/{empresaId}")
