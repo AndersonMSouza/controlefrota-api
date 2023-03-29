@@ -20,6 +20,7 @@ import com.mendes.anderson.domain.exceptions.EntidadeEmUsoException;
 import com.mendes.anderson.domain.exceptions.EntidadeNaoEncontradaException;
 import com.mendes.anderson.domain.model.Veiculo;
 import com.mendes.anderson.domain.repository.VeiculoRepository;
+import com.mendes.anderson.domain.service.CadastroVeiculoService;
 
 @RestController
 @RequestMapping("/veiculos")
@@ -27,6 +28,9 @@ public class VeiculoController {
 
 	@Autowired
 	private VeiculoRepository veiculoRepository;
+	
+	@Autowired
+	private CadastroVeiculoService cadastroVeiculoService;
 	
 	@GetMapping
 	public List<Veiculo> listar() {
@@ -48,7 +52,7 @@ public class VeiculoController {
 	@PostMapping
 	public ResponseEntity<?> adicionar(@RequestBody Veiculo veiculo) {
 		try {
-			veiculo = veiculoRepository.save(veiculo);
+			veiculo = cadastroVeiculoService.salvar(veiculo);
 			return ResponseEntity.status(HttpStatus.CREATED).body(veiculo);
 		
 		} catch (EntidadeNaoEncontradaException e) {
