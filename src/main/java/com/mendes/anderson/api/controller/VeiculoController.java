@@ -81,7 +81,7 @@ public class VeiculoController {
 	@DeleteMapping("/{veiculoId}")
 	public ResponseEntity<Veiculo> remover(@PathVariable Long veiculoId) {
 		try {
-			veiculoRepository.deleteById(veiculoId);
+			cadastroVeiculoService.excluir(veiculoId);
 			return ResponseEntity.noContent().build();
 			
 		} catch (EntidadeNaoEncontradaException e) {
