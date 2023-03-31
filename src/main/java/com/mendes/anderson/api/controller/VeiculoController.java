@@ -38,15 +38,8 @@ public class VeiculoController {
 	}
 	
 	@GetMapping("/{veiculoId}")
-	public ResponseEntity<Veiculo> buscar(@PathVariable Long veiculoId) {
-		Optional<Veiculo> veiculo = veiculoRepository.findById(veiculoId);
-	
-		if (veiculo.isPresent()) {
-			return ResponseEntity.ok(veiculo.get()); 
-		}
-		
-		return ResponseEntity.notFound().build();
-	
+	public Veiculo buscar(@PathVariable Long veiculoId) {
+		return cadastroVeiculoService.buscarOuFalhar(veiculoId);
 	}
 	
 	@PostMapping
