@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mendes.anderson.domain.exceptions.EntidadeEmUsoException;
@@ -43,14 +44,9 @@ public class VeiculoController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> adicionar(@RequestBody Veiculo veiculo) {
-		try {
-			veiculo = cadastroVeiculoService.salvar(veiculo);
-			return ResponseEntity.status(HttpStatus.CREATED).body(veiculo);
-		
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+	@ResponseStatus(HttpStatus.CREATED)
+	public Veiculo adicionar(@RequestBody Veiculo veiculo) {
+		return cadastroVeiculoService.salvar(veiculo);
 	}
 	
 	@PutMapping("/{veiculoId}")
