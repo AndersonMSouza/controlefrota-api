@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mendes.anderson.domain.exceptions.EntidadeEmUsoException;
 import com.mendes.anderson.domain.exceptions.EntidadeNaoEncontradaException;
+import com.mendes.anderson.domain.model.Empresa;
 import com.mendes.anderson.domain.model.Veiculo;
 import com.mendes.anderson.domain.repository.VeiculoRepository;
 import com.mendes.anderson.domain.service.CadastroVeiculoService;
@@ -50,21 +51,13 @@ public class VeiculoController {
 	}
 	
 	@PutMapping("/{veiculoId}")
-	public ResponseEntity<?> atualizar(@PathVariable Long veiculoId, @RequestBody Veiculo veiculo) {
-		try {
-			Optional<Veiculo> veiculoAtual = veiculoRepository.findById(veiculoId);
+	public Veiculo atualizar(@PathVariable Long veiculoId, 
+		@RequestBody Veiculo veiculo) {
+		Veiculo veiculoAtual = veiculoRepository.findById(veiculoId).orElse(null);	
+		
+		BeanUtils.copyProperties(veiculo, veiculoAtual, "id");
 			
-			if (veiculoAtual.isPresent()) {
-				BeanUtils.copyProperties(veiculo, veiculoAtual.get(), "id");
-				Veiculo veiculoSalvo = veiculoRepository.save(veiculoAtual.get());
-				return ResponseEntity.ok(veiculoSalvo);
-			}
-			
-			return ResponseEntity.notFound().build();
-			
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+		return cadastroVeiculoService.salvar(veiculoAtual);
 	}
 	
 	@DeleteMapping("/{veiculoId}")
