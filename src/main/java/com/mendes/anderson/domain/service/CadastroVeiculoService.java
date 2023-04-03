@@ -31,14 +31,14 @@ public class CadastroVeiculoService {
 	public void excluir(Long veiculoId) {
 		try {
 			veiculoRepository.deleteById(veiculoId);
-		}  catch (EmptyResultDataAccessException e) {
+		} catch (EmptyResultDataAccessException e) {
 			throw new EntidadeNaoEncontradaException(
-					String.format(MSG_VEICULO_NAO_ENCONTRADO, veiculoId));
+				String.format(MSG_VEICULO_NAO_ENCONTRADO, veiculoId));
 			
-			} catch (DataIntegrityViolationException e) {
-				throw new EntidadeEmUsoException(
-					String.format(MSG_VEICULO_EM_USO, veiculoId));
-			}
+		} catch (DataIntegrityViolationException e) {
+			throw new EntidadeEmUsoException(
+				String.format(MSG_VEICULO_EM_USO, veiculoId));
+		}
 	}
 	
 	public Veiculo buscarOuFalhar(@PathVariable Long veiculoId) {

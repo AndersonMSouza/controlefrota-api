@@ -29,7 +29,7 @@ public class CadastroEmpresaService {
 	
 	public void excluir(Long empresaId) {
 		try {
-		empresaRepository.deleteById(empresaId);
+			empresaRepository.deleteById(empresaId);
 		} catch (EmptyResultDataAccessException e) {
 			throw new EntidadeNaoEncontradaException(
 					String.format(MSG_EMPRESA_NAO_ENCONTRADA, empresaId));
