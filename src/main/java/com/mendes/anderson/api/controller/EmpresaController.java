@@ -49,7 +49,7 @@ public class EmpresaController {
 	@PutMapping("/{empresaId}")
 	public Empresa atualizar(@PathVariable Long empresaId,
 			@RequestBody Empresa empresa) {					
-		Empresa empresaAtual = empresaRepository.findById(empresaId).orElse(null);
+		Empresa empresaAtual = cadastroEmpresaService.buscarOuFalhar(empresaId);
 			
 		BeanUtils.copyProperties(empresa, empresaAtual, "id");
 				
