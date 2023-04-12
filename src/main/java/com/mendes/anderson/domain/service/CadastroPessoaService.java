@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.mendes.anderson.domain.exceptions.EntidadeEmUsoException;
 import com.mendes.anderson.domain.exceptions.EntidadeNaoEncontradaException;
@@ -38,6 +39,12 @@ public class CadastroPessoaService {
 			throw new EntidadeEmUsoException(
 				String.format(MSG_PESSOA_EM_USO, pessoaId));
 		}
+	}
+	
+	public Pessoa buscarOuFalhar(@PathVariable Long pessoaId) {
+		return pessoaRepository.findById(pessoaId)
+			.orElseThrow(() -> new EntidadeNaoEncontradaException(
+				String.format(MSG_PESSOA_NAO_ENCONTRADA, pessoaId)));
 	}
 
 }

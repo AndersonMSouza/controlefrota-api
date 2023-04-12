@@ -20,6 +20,7 @@ import com.mendes.anderson.domain.exceptions.EntidadeEmUsoException;
 import com.mendes.anderson.domain.exceptions.EntidadeNaoEncontradaException;
 import com.mendes.anderson.domain.model.Pessoa;
 import com.mendes.anderson.domain.repository.PessoaRepository;
+import com.mendes.anderson.domain.service.CadastroPessoaService;
 
 @RestController
 @RequestMapping("/pessoas")
@@ -28,20 +29,17 @@ public class PessoaController {
 	@Autowired
 	private PessoaRepository pessoaRepository;
 	
+	@Autowired
+	private CadastroPessoaService cadastroPessoaService;
+	
 	@GetMapping
 	public List<Pessoa> listar() {
 		return pessoaRepository.findAll();
 	}
 	
 	@GetMapping("/{pessoaId}")
-	public ResponseEntity<Pessoa> buscar(@PathVariable Long pessoaId) {
-		Optional<Pessoa> pessoa = pessoaRepository.findById(pessoaId);
-	
-		if (pessoa.isPresent()) {
-			return ResponseEntity.ok(pessoa.get()); 
-		}
-		
-		return ResponseEntity.notFound().build();	
+	public Pessoa buscar(@PathVariable Long pessoaId) {
+		return cadastroPessoaService.buscarOuFalhar(pessoaId);			
 	}
 	
 	@PostMapping
