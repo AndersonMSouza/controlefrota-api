@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mendes.anderson.domain.exceptions.EntidadeEmUsoException;
@@ -43,14 +44,9 @@ public class PessoaController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> adicionar(@RequestBody Pessoa pessoa) {
-		try {
-			pessoa = pessoaRepository.save(pessoa);
-			return ResponseEntity.status(HttpStatus.CREATED).body(pessoa);
-		
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+	@ResponseStatus(HttpStatus.CREATED)
+	public Pessoa adicionar(@RequestBody Pessoa pessoa) {
+		return cadastroPessoaService.salvar(pessoa);
 	}
 	
 	@PutMapping("/{pessoaId}")
