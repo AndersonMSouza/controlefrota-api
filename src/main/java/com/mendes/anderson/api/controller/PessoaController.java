@@ -60,16 +60,8 @@ public class PessoaController {
 	}
 	
 	@DeleteMapping("/{pessoaId}")
-	public ResponseEntity<Pessoa> remover(@PathVariable Long pessoaId) {
-		try {
-			pessoaRepository.deleteById(pessoaId);
-			return ResponseEntity.noContent().build();
-			
-		} catch (EntidadeNaoEncontradaException e) {
-			return ResponseEntity.notFound().build();
-		
-		} catch (EntidadeEmUsoException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
-		}		
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void remover(@PathVariable Long pessoaId) {
+		cadastroPessoaService.excluir(pessoaId);
 	}	
 }
