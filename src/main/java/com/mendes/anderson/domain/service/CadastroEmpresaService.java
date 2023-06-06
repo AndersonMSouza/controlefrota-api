@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.mendes.anderson.domain.exceptions.EmpresaNaoEncontradaException;
 import com.mendes.anderson.domain.exceptions.EntidadeEmUsoException;
-import com.mendes.anderson.domain.exceptions.EntidadeNaoEncontradaException;
 import com.mendes.anderson.domain.model.Empresa;
 import com.mendes.anderson.domain.repository.EmpresaRepository;
 
@@ -16,9 +15,6 @@ public class CadastroEmpresaService {
 
 	private static final String MSG_EMPRESA_EM_USO 
 		= "Empresa de código %d não pode ser removida, pois está em uso!";
-	
-	private static final String MSG_EMPRESA_NAO_ENCONTRADA 
-		= "Não existe empresa cadastrada com o código %d";
 	
 	@Autowired
 	private EmpresaRepository empresaRepository;
@@ -41,6 +37,6 @@ public class CadastroEmpresaService {
 	
 	public Empresa buscarOuFalhar(Long empresaId) {
 		return empresaRepository.findById(empresaId)
-			.orElseThrow(() -> new EmpresaNaoEncontradaException(empresaId)));
+			.orElseThrow(() -> new EmpresaNaoEncontradaException(empresaId));
 	}
 }
