@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mendes.anderson.domain.exceptions.EmpresaNaoEncontradaException;
+import com.mendes.anderson.domain.exceptions.NegocioException;
 import com.mendes.anderson.domain.model.Empresa;
 import com.mendes.anderson.domain.repository.EmpresaRepository;
 import com.mendes.anderson.domain.service.CadastroEmpresaService;
@@ -49,11 +51,16 @@ public class EmpresaController {
 	@PutMapping("/{empresaId}")
 	public Empresa atualizar(@PathVariable Long empresaId,
 			@RequestBody Empresa empresa) {					
-		Empresa empresaAtual = cadastroEmpresaService.buscarOuFalhar(empresaId);
+		try {
+			Empresa empresaAtual = cadastroEmpresaService.buscarOuFalhar(empresaId);
 			
-		BeanUtils.copyProperties(empresa, empresaAtual, "id");
-				
-		return cadastroEmpresaService.salvar(empresaAtual);
+			BeanUtils.copyProperties(empresa, empresaAtual, "id");
+			
+			return cadastroEmpresaService.salvar(empresaAtual);
+			
+		} catch (EmpresaNaoEncontradaException e) {
+			throw new NegocioException(e.getMessage());
+		}
 	}
 	
 	@DeleteMapping("/{empresaId}")

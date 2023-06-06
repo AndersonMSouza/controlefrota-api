@@ -5,6 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.mendes.anderson.domain.exceptions.EmpresaNaoEncontradaException;
 import com.mendes.anderson.domain.exceptions.EntidadeEmUsoException;
 import com.mendes.anderson.domain.exceptions.EntidadeNaoEncontradaException;
 import com.mendes.anderson.domain.model.Empresa;
@@ -30,8 +31,7 @@ public class CadastroEmpresaService {
 		try {
 			empresaRepository.deleteById(empresaId);
 		} catch (EmptyResultDataAccessException e) {
-			throw new EntidadeNaoEncontradaException(
-					String.format(MSG_EMPRESA_NAO_ENCONTRADA, empresaId));
+			throw new EmpresaNaoEncontradaException(empresaId);
 			
 		} catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(
@@ -41,7 +41,6 @@ public class CadastroEmpresaService {
 	
 	public Empresa buscarOuFalhar(Long empresaId) {
 		return empresaRepository.findById(empresaId)
-			.orElseThrow(() -> new EntidadeNaoEncontradaException(
-				String.format(MSG_EMPRESA_NAO_ENCONTRADA, empresaId)));
+			.orElseThrow(() -> new EmpresaNaoEncontradaException(empresaId)));
 	}
 }
