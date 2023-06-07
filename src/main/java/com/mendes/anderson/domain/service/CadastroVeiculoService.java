@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.mendes.anderson.domain.exceptions.EntidadeEmUsoException;
-import com.mendes.anderson.domain.exceptions.EntidadeNaoEncontradaException;
+import com.mendes.anderson.domain.exceptions.VeiculoNaoEncontradoException;
 import com.mendes.anderson.domain.model.Veiculo;
 import com.mendes.anderson.domain.repository.VeiculoRepository;
 
@@ -16,11 +16,7 @@ public class CadastroVeiculoService {
 	
 	private static final String MSG_VEICULO_EM_USO 
 		= "Veiculo de código %d não pode ser removido, pois está em uso!";
-	
-	private static final String MSG_VEICULO_NAO_ENCONTRADO 
-		= "Não existe veiculo cadastrado com o código %d";
-
-
+		
 	@Autowired
 	private VeiculoRepository veiculoRepository;
 	
@@ -32,8 +28,7 @@ public class CadastroVeiculoService {
 		try {
 			veiculoRepository.deleteById(veiculoId);
 		} catch (EmptyResultDataAccessException e) {
-			throw new EntidadeNaoEncontradaException(
-				String.format(MSG_VEICULO_NAO_ENCONTRADO, veiculoId));
+			throw new VeiculoNaoEncontradoException(veiculoId);
 			
 		} catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(
@@ -43,7 +38,6 @@ public class CadastroVeiculoService {
 	
 	public Veiculo buscarOuFalhar(@PathVariable Long veiculoId) {
 		return veiculoRepository.findById(veiculoId)
-			.orElseThrow(() -> new EntidadeNaoEncontradaException(
-				String.format(MSG_VEICULO_NAO_ENCONTRADO, veiculoId)));
+			.orElseThrow(() -> new VeiculoNaoEncontradoException(veiculoId));
 	}
 }
